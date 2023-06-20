@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform groundCheckTrans;
 
     public Transform orientation;
+    public PlayerCam playerCam;
 
     float horizontalInput;
     float verticalInput;
@@ -31,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 gravForce;
     // Start is called before the first frame update
     void Start() {
-        
+        Physics.gravity = gravForce;
         rig.GetComponent<Rigidbody>();
         rig.freezeRotation = true;
         readyToJump = true;
@@ -41,14 +42,14 @@ public class PlayerMovement : MonoBehaviour
 
     // Update is called once per frame
     private void Update() {
-        Physics.gravity = gravForce;
+       
         grounded = Physics.Raycast(groundCheckTrans.position, Vector3.down, 0.1f, whatIsGround);
 
         movePlayer();
         speedControl();
 
-        if (Input.GetKey(KeyCode.Space) && readyToJump && grounded) {
-
+        if (Input.GetKeyDown(KeyCode.Space) && readyToJump && grounded) {
+            
             readyToJump = false;
             Jump();
             Invoke(nameof(resetJump), jumpCooldown);
@@ -56,13 +57,13 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
-        if (grounded && rig.velocity == new Vector3(0f, 0f, 0f))
+        if (grounded && rig.velocity == Vector3.zero)
         {
             rig.drag = groundDrag;
             readyToJump = true;
         }
         else {
-
+            
             rig.drag = 0f;
         
         }
@@ -78,14 +79,29 @@ public class PlayerMovement : MonoBehaviour
         //caculate movement
         moveDir = (orientation.forward * verticalInput + orientation.right * horizontalInput) * Time.deltaTime;
 
-        if (grounded)
+        //boost
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            rig.AddForce(moveDir.normalized * moveSpeed * 10f, ForceMode.Force);
+            rig.drag = 0;
+            rig.AddForce( playerCam.transform.forward * moveSpeed * 150f, ForceMode.Acceleration);
+            rig.AddForce(playerCam.transform.forward * moveSpeed * 400f, ForceMode.Acceleration);
+
         }
-        else
-        {
-            rig.AddForce(moveDir.normalized * moveSpeed * 10f * airMult, ForceMode.Force);
+        else {
+
+            if (grounded)
+            {
+                rig.AddForce(moveDir.normalized * moveSpeed * 10f, ForceMode.Force);
+            }
+            else
+            {
+                rig.AddForce(moveDir.normalized * moveSpeed * 10f * airMult, ForceMode.Force);
+            }
+
         }
+
+
+        
          
     }
 
@@ -106,7 +122,7 @@ public class PlayerMovement : MonoBehaviour
 
         rig.velocity = new Vector3(rig.velocity.x, 0f, rig.velocity.z);
 
-        rig.AddForce(transform.up * jumpForce, ForceMode.Impulse);    
+        rig.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);    
     
     }
 
