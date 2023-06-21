@@ -677,7 +677,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!114 &1925058390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -697,11 +697,12 @@ MonoBehaviour:
   playerHeight: 2
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 72
+    m_Bits: 192
   grounded: 0
   groundDrag: 15
   groundCheckTrans: {fileID: 324140040}
   orientation: {fileID: 1575304929}
+  playerCam: {fileID: 963194229}
   rig: {fileID: 1925058388}
   gravForce: {x: 0, y: -50, z: 0}
 --- !u!1 &2050789065
@@ -970,7 +971,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6285253313261655326, guid: 4ef29f75b827617458018918a7d3342d, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6824893738036717553, guid: 4ef29f75b827617458018918a7d3342d, type: 3}
       propertyPath: m_Layer

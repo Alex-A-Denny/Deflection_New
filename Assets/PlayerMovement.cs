@@ -83,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             rig.drag = 0;
-            rig.AddForce( playerCam.transform.forward * moveSpeed * 150f, ForceMode.Acceleration);
+            rig.AddForce(playerCam.transform.forward * moveSpeed * 150f, ForceMode.Acceleration);
             rig.AddForce(playerCam.transform.forward * moveSpeed * 400f, ForceMode.Acceleration);
 
         }
