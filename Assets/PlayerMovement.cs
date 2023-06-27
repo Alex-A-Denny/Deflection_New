@@ -42,8 +42,8 @@ public class PlayerMovement : MonoBehaviour
 
     // Update is called once per frame
     private void Update() {
-       
-        grounded = Physics.Raycast(groundCheckTrans.position, Vector3.down, 0.1f, whatIsGround);
+        
+        grounded = Physics.Raycast(groundCheckTrans.position, Vector3.down, 0.2f, whatIsGround);
 
         movePlayer();
         speedControl();
@@ -83,19 +83,19 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             rig.drag = 0;
-            rig.AddForce(playerCam.transform.forward * moveSpeed * 150f, ForceMode.Acceleration);
-            rig.AddForce(playerCam.transform.forward * moveSpeed * 400f, ForceMode.Acceleration);
+            rig.AddForce(playerCam.transform.rotation.eulerAngles * moveSpeed * 150f, ForceMode.Acceleration);
+            rig.AddForce(playerCam.transform.rotation.eulerAngles * moveSpeed * 400f, ForceMode.Acceleration);
 
         }
         else {
 
             if (grounded)
             {
-                rig.AddForce(moveDir.normalized * moveSpeed * 10f, ForceMode.Force);
+                rig.AddForce(moveDir.normalized * moveSpeed * 10f, ForceMode.Acceleration);
             }
             else
             {
-                rig.AddForce(moveDir.normalized * moveSpeed * 10f * airMult, ForceMode.Force);
+                rig.AddForce(moveDir.normalized * moveSpeed * 10f * airMult, ForceMode.Acceleration);
             }
 
         }
