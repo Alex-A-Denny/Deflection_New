@@ -11,7 +11,7 @@ public class SlicerMovement : MonoBehaviour
     [Header("Hover")]
     public float hoverHeight = 1.5f;
     public float hoverForce = 10f;
-    public float gravForce;
+    public float slowDownDistance = 1.5f;
     public float hoverForceLimit = 100f;
 
     // Start is called before the first frame update
@@ -36,23 +36,18 @@ public class SlicerMovement : MonoBehaviour
         {
             float proportionalHeight = hoverHeight - hit.distance;
 
+            // Calculate the limited hover force
+            float limitedHoverForce = Mathf.Clamp(proportionalHeight * hoverForce, -hoverForceLimit, hoverForceLimit);
 
-            if (proportionalHeight > 0f) //slicer pos is lower than hoverHeight
-            {
+            // Apply damping factor based on proportionalHeight
+            float dampingFactor = 1f - Mathf.Clamp01(proportionalHeight / hoverHeight);
+            limitedHoverForce *= dampingFactor;
+            Debug.Log("" + limitedHoverForce);
 
-                // Limit hover force when close to the hover height
-                float limitedHoverForce = Mathf.Clamp(proportionalHeight * hoverForce, -hoverForceLimit, hoverForceLimit);
+            Vector3 appliedHoverForce = Vector3.up * limitedHoverForce;
+            rig.AddForce(appliedHoverForce, ForceMode.Force);
 
-                Vector3 appliedHoverForce = Vector3.up * limitedHoverForce;
-                rig.AddForce(appliedHoverForce, ForceMode.Force);
 
-            }
-            else
-            {
-                rig.AddForce(Vector3.down * gravForce, ForceMode.Force);
-            }
-            
-            
         }
         
     }
